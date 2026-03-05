@@ -45,7 +45,7 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "jbmaene",
+      "owner": "jbmaene1998",
       "repo": "Clarity"
     },
     "win": {
