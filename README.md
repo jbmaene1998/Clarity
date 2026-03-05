@@ -83,7 +83,7 @@ Spreadsheets become hard to maintain. Many budget apps charge monthly fees for f
 ### Run from source
 
 ```bash
-npm install
+npm install 
 npm start
 # Demo seed mode (date-based sample data for testing/screenshots)
 npm run start:demo
