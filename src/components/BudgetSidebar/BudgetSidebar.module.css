@@ -1,0 +1,66 @@
+.sidebar {
+  background:
+    linear-gradient(160deg, rgba(158, 208, 241, 0.16), rgba(255, 255, 255, 0) 34%),
+    var(--panel);
+  border: 1px solid color-mix(in srgb, var(--line) 84%, white 16%);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 18px 30px rgba(8, 22, 34, 0.1);
+}
+
+.sidebar h3 {
+  margin-top: 0;
+}
+
+.budgetItem {
+  margin-bottom: 12px;
+  border: 1px solid color-mix(in srgb, var(--line) 76%, transparent);
+  border-radius: 10px;
+  padding: 8px;
+  background: color-mix(in srgb, var(--panel-soft) 66%, transparent);
+}
+
+.budgetRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.rolloverInfo {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.bar {
+  height: 9px;
+  border-radius: 999px;
+  background: var(--bar-bg);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  width: 0%;
+}
+
+.green {
+  background: var(--success);
+}
+
+.orange {
+  background: var(--warning);
+}
+
+.red {
+  background: var(--error);
+}
+
+.empty {
+  text-align: center;
+  padding: 22px;
+  border: 1px dashed var(--empty-border);
+  border-radius: 10px;
+  color: var(--muted);
+}

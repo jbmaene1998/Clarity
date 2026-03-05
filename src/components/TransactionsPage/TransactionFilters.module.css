@@ -1,0 +1,11 @@
+.toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  border: 1px solid color-mix(in srgb, var(--line) 82%, white 18%);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--panel-soft) 72%, transparent);
+  padding: 8px;
+  margin-bottom: 10px;
+}

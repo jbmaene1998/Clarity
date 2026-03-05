@@ -1,0 +1,122 @@
+.panel {
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--line) 84%, white 16%);
+  border-radius: 14px;
+  background:
+    linear-gradient(160deg, rgba(148, 201, 238, 0.16), rgba(255, 255, 255, 0) 30%),
+    var(--panel);
+  box-shadow: 0 18px 30px rgba(8, 22, 34, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.range {
+  display: flex;
+  gap: 6px;
+}
+
+.active {
+  border-color: var(--accent);
+  background: var(--active-bg);
+}
+
+.legend {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.income,
+.expense,
+.savings {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.income::before,
+.expense::before,
+.savings::before {
+  content: '';
+  width: 10px;
+  height: 2px;
+  border-radius: 999px;
+}
+
+.income::before {
+  background: var(--trend-income);
+}
+
+.expense::before {
+  background: var(--trend-expense);
+}
+
+.savings::before {
+  background: var(--trend-savings);
+}
+
+.chart {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--panel-soft) 65%, transparent);
+  padding: 6px;
+}
+
+.gridLine {
+  stroke: var(--trend-grid);
+  stroke-width: 1;
+}
+
+.tickText {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.line {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.incomeLine {
+  stroke: var(--trend-income);
+}
+
+.expenseLine {
+  stroke: var(--trend-expense);
+}
+
+.savingsLine {
+  stroke: var(--trend-savings);
+}
+
+.footer {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.empty {
+  text-align: center;
+  padding: 16px;
+  border: 1px dashed var(--empty-border);
+  border-radius: 10px;
+  color: var(--muted);
+}

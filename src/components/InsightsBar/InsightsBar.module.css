@@ -1,0 +1,12 @@
+.insights {
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--insights-border) 84%, white 16%);
+  border-radius: 12px;
+  background:
+    linear-gradient(160deg, rgba(156, 214, 248, 0.14), rgba(255, 255, 255, 0) 32%),
+    var(--insights-bg);
+  color: var(--muted);
+  font-size: 13px;
+  box-shadow: 0 12px 20px rgba(8, 22, 34, 0.08);
+}

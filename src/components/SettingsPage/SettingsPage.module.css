@@ -1,0 +1,110 @@
+.panel {
+  background:
+    linear-gradient(160deg, rgba(154, 210, 244, 0.16), rgba(255, 255, 255, 0) 34%),
+    var(--panel);
+  border: 1px solid color-mix(in srgb, var(--line) 84%, white 16%);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 18px 30px rgba(8, 22, 34, 0.1);
+}
+
+.panel h2 {
+  margin: 0 0 6px;
+}
+
+.helper {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.preferences {
+  border: 1px solid color-mix(in srgb, var(--line) 82%, white 18%);
+  background: color-mix(in srgb, var(--panel-soft) 78%, transparent);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.preferences h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.actionRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sliderRow {
+  display: grid;
+  grid-template-columns: 120px 1fr 52px;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.toggleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.secondaryButton {
+  justify-self: start;
+}
+
+.ruleList {
+  display: grid;
+  gap: 6px;
+}
+
+.ruleRow {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.dangerZone {
+  border: 1px solid var(--danger-zone-border);
+  background: var(--danger-zone-bg);
+  border-radius: 10px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.dangerZone h3 {
+  margin: 0;
+  color: var(--danger-zone-title);
+  font-size: 14px;
+}
+
+.dangerZone label {
+  font-size: 13px;
+  color: var(--danger-zone-label);
+}
+
+.dangerButton {
+  border-color: var(--danger-button-border);
+  background: var(--danger-button-bg);
+}
+
+.dangerButton:hover {
+  filter: brightness(1.08);
+}
+
+.dangerButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

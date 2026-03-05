@@ -1,0 +1,33 @@
+.toastWrap {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--toast-border) 82%, white 18%);
+  background:
+    linear-gradient(155deg, rgba(171, 214, 243, 0.16), rgba(255, 255, 255, 0) 36%),
+    var(--toast-bg);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 12px 22px rgba(8, 22, 34, 0.2);
+}
+
+.error {
+  border-color: var(--toast-error-border);
+  background: var(--toast-error-bg);
+}
+
+.toast button {
+  padding: 4px 8px;
+  border-radius: 6px;
+}

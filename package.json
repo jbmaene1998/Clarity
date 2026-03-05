@@ -1,0 +1,67 @@
+{
+  "name": "clarity-app",
+  "version": "1.0.0",
+  "description": "Clarity - Personal Finance Desktop App",
+  "main": "main.js",
+  "author": "Clarity Team",
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "electron .",
+    "start:demo": "electron . --demo",
+    "test": "node --test",
+    "dist": "vite build && set CSC_IDENTITY_AUTO_DISCOVERY=false&& electron-builder"
+  },
+  "dependencies": {
+    "electron-updater": "^6.6.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3",
+    "vite": "^6.4.1"
+  },
+  "build": {
+    "appId": "io.github.jbmaene.clarity",
+    "productName": "Clarity",
+    "files": [
+      "main.js",
+      "preload.js",
+      "dist/renderer/**",
+      "lib/**",
+      "README.md"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "extraResources": [
+      {
+        "from": "build/icons/app.ico",
+        "to": "icons/app.ico"
+      }
+    ],
+    "publish": {
+      "provider": "github",
+      "owner": "jbmaene",
+      "repo": "Clarity"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icons/app.ico",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Clarity",
+      "installerIcon": "build/icons/app.ico",
+      "uninstallerIcon": "build/icons/app.ico",
+      "installerHeaderIcon": "build/icons/app.ico"
+    }
+  }
+}

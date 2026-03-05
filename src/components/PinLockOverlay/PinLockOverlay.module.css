@@ -1,0 +1,36 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background:
+    linear-gradient(150deg, rgba(6, 12, 18, 0.7), rgba(9, 17, 26, 0.44)),
+    radial-gradient(circle at 14% 10%, rgba(79, 141, 182, 0.24) 0, transparent 34%),
+    radial-gradient(circle at 86% 84%, rgba(82, 162, 113, 0.2) 0, transparent 42%);
+  backdrop-filter: blur(4px);
+}
+
+.card {
+  width: min(360px, calc(100vw - 24px));
+  border: 1px solid color-mix(in srgb, var(--line) 82%, white 18%);
+  border-radius: 14px;
+  background:
+    linear-gradient(160deg, rgba(154, 210, 244, 0.18), rgba(255, 255, 255, 0) 34%),
+    var(--panel);
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+  box-shadow: 0 30px 52px rgba(0, 0, 0, 0.42);
+}
+
+.card h2 {
+  margin: 0;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}

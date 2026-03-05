@@ -1,0 +1,246 @@
+.topbar {
+  display: grid;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 74%, white 26%);
+  background:
+    linear-gradient(142deg, color-mix(in srgb, var(--accent) 13%, transparent), transparent 48%),
+    linear-gradient(218deg, color-mix(in srgb, var(--accent-2) 12%, transparent), transparent 45%),
+    var(--topbar-bg);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 16px 36px rgba(8, 22, 34, 0.14);
+}
+
+.topRow {
+  display: grid;
+  grid-template-columns: minmax(240px, auto) minmax(360px, 1fr) minmax(280px, auto);
+  align-items: center;
+  gap: 12px;
+}
+
+.brand {
+  display: grid;
+  align-items: center;
+  gap: 3px;
+}
+
+.brandLogo {
+  height: 184px;
+  width: auto;
+  max-width: min(900px, 88vw);
+  display: block;
+}
+
+.brandLogoInverted {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.nav {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 6px;
+  border: 1px solid color-mix(in srgb, var(--line) 80%, white 20%);
+  border-radius: 16px;
+  background:
+    linear-gradient(158deg, color-mix(in srgb, var(--panel-soft) 88%, white 12%), color-mix(in srgb, var(--panel-soft) 70%, transparent));
+  box-shadow: 0 10px 22px rgba(10, 28, 42, 0.1);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.nav button {
+  border-radius: 11px;
+  padding: 8px 12px;
+  white-space: nowrap;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.nav button:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--active-bg) 65%, transparent);
+  border-color: color-mix(in srgb, var(--line) 55%, transparent);
+}
+
+.utilityRail {
+  display: grid;
+  gap: 8px;
+  justify-items: end;
+}
+
+.pagePill {
+  display: inline-grid;
+  justify-items: end;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--line) 78%, white 22%);
+  background: color-mix(in srgb, var(--panel-soft) 74%, transparent);
+}
+
+.pagePill span {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--muted);
+}
+
+.pagePill strong {
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.themeSwitch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 5px 10px;
+  border: 1px solid color-mix(in srgb, var(--line) 80%, white 20%);
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--panel-soft) 64%, transparent);
+}
+
+.themeLabel {
+  min-width: 38px;
+  text-align: right;
+}
+
+.themeSwitch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: relative;
+  width: 46px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--panel-soft);
+  border: 1px solid var(--line);
+  transition: background-color 160ms ease;
+}
+
+.slider::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  transition: transform 160ms ease;
+}
+
+.themeSwitch input:checked + .slider {
+  background: color-mix(in srgb, var(--accent) 38%, var(--panel-soft) 62%);
+}
+
+.themeSwitch input:checked + .slider::after {
+  transform: translateX(22px);
+}
+
+.themeSwitch input:focus-visible + .slider {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.active {
+  border-color: color-mix(in srgb, var(--accent) 58%, var(--line));
+  background: linear-gradient(152deg, color-mix(in srgb, var(--active-bg) 70%, white 30%), color-mix(in srgb, var(--active-bg) 80%, transparent));
+  box-shadow: 0 6px 14px rgba(13, 43, 63, 0.16);
+}
+
+.monthNav {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid color-mix(in srgb, var(--line) 80%, white 20%);
+  border-radius: 12px;
+  padding: 4px;
+  background: color-mix(in srgb, var(--panel-soft) 78%, transparent);
+}
+
+.monthNav button {
+  border-radius: 9px;
+  min-width: 34px;
+  padding: 6px 9px;
+}
+
+.monthLabel {
+  min-width: 148px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 1100px) {
+  .brandLogo {
+    height: 148px;
+  }
+
+  .topRow {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .nav {
+    justify-content: flex-start;
+  }
+
+  .utilityRail {
+    justify-items: stretch;
+    gap: 10px;
+  }
+
+  .pagePill {
+    justify-items: start;
+  }
+
+  .monthNav,
+  .themeSwitch {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    padding: 10px;
+    gap: 9px;
+  }
+
+  .brandLogo {
+    height: 124px;
+    max-width: min(760px, 96vw);
+  }
+
+  .nav {
+    padding: 5px;
+    border-radius: 12px;
+  }
+
+  .nav button {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+
+  .monthLabel {
+    min-width: 132px;
+  }
+}

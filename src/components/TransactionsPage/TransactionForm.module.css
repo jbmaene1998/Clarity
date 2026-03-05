@@ -1,0 +1,32 @@
+.toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  border: 1px solid color-mix(in srgb, var(--line) 82%, white 18%);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--panel-soft) 76%, transparent);
+  padding: 8px;
+}
+
+.entryPane {
+  margin-top: 10px;
+  border: 1px solid color-mix(in srgb, var(--entry-border) 84%, white 16%);
+  border-radius: 12px;
+  background:
+    linear-gradient(155deg, rgba(181, 225, 252, 0.14), rgba(255, 255, 255, 0) 34%),
+    var(--panel-soft);
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 12px 22px rgba(8, 22, 34, 0.08);
+}
+
+@media (max-width: 1100px) {
+  .entryPane {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
