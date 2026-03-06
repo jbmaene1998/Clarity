@@ -218,6 +218,7 @@ export default function TutorialOverlay() {
   }, [state.tutorial.active, step, updateSpotlight]);
 
   async function finishTutorial() {
+    dispatch({ type: 'STOP_DEMO' });
     dispatch({ type: 'SET_TUTORIAL', payload: { active: false } });
     try {
       await window.budgetApi.updateOnboardingSettings({ tutorialCompleted: true });

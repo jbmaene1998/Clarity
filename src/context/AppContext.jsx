@@ -20,6 +20,7 @@ const initialState = {
       automation: { autoCategorizeEnabled: true },
     },
   },
+  realData: null,
   currentMonth: new Date(),
   page: 'transactions',
   pinLocked: false,
@@ -43,6 +44,13 @@ function reducer(state, action) {
       return { ...state, filters: { ...state.filters, ...action.payload } };
     case 'SET_TUTORIAL':
       return { ...state, tutorial: { ...state.tutorial, ...action.payload } };
+    case 'START_DEMO': {
+      const demoData = { ...action.payload, settings: state.data.settings };
+      return { ...state, realData: state.data, data: demoData };
+    }
+    case 'STOP_DEMO':
+      if (!state.realData) return state;
+      return { ...state, data: state.realData, realData: null };
     case 'SET_THEME':
       return { ...state, theme: action.payload };
     case 'ADD_TOAST':
