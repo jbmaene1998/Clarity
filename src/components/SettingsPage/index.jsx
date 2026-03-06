@@ -15,6 +15,11 @@ export default function SettingsPage({ addToast }) {
   const [isExportingBackup, setIsExportingBackup] = useState(false);
   const [isUpdatingNotifications, setIsUpdatingNotifications] = useState(false);
   const [isUpdatingAutomation, setIsUpdatingAutomation] = useState(false);
+  const [pinSection, setPinSection] = useState('view'); // 'view' | 'set' | 'change' | 'remove'
+  const [newPin, setNewPin] = useState('');
+  const [confirmNewPin, setConfirmNewPin] = useState('');
+  const [currentPin, setCurrentPin] = useState('');
+  const [isPinSaving, setIsPinSaving] = useState(false);
   const [ruleKeyword, setRuleKeyword] = useState('');
   const [ruleType, setRuleType] = useState('expense');
   const [ruleTarget, setRuleTarget] = useState('');
@@ -240,6 +245,65 @@ export default function SettingsPage({ addToast }) {
     addToast('Rule removed');
   }
 
+  async function handleSetPin(event) {
+    event.preventDefault();
+    if (newPin.length < 4) { addToast('PIN must be at least 4 digits.', true); return; }
+    if (newPin !== confirmNewPin) { addToast('PINs do not match.', true); return; }
+    setIsPinSaving(true);
+    try {
+      const response = await window.budgetApi.setPin(newPin);
+      if (!response.ok) throw new Error(response.error || 'Failed to set PIN');
+      dispatch({ type: 'SET_DATA', payload: response.data });
+      setNewPin(''); setConfirmNewPin(''); setPinSection('view');
+      addToast('PIN set successfully.');
+    } catch (error) {
+      addToast(error.message, true);
+    } finally {
+      setIsPinSaving(false);
+    }
+  }
+
+  async function handleChangePin(event) {
+    event.preventDefault();
+    if (newPin.length < 4) { addToast('New PIN must be at least 4 digits.', true); return; }
+    if (newPin !== confirmNewPin) { addToast('PINs do not match.', true); return; }
+    setIsPinSaving(true);
+    try {
+      const disableRes = await window.budgetApi.disablePin(currentPin);
+      if (!disableRes.ok) throw new Error(disableRes.error || 'Current PIN is incorrect');
+      const setRes = await window.budgetApi.setPin(newPin);
+      if (!setRes.ok) throw new Error(setRes.error || 'Failed to set new PIN');
+      dispatch({ type: 'SET_DATA', payload: setRes.data });
+      setCurrentPin(''); setNewPin(''); setConfirmNewPin(''); setPinSection('view');
+      addToast('PIN changed successfully.');
+    } catch (error) {
+      addToast(error.message, true);
+    } finally {
+      setIsPinSaving(false);
+    }
+  }
+
+  async function handleDisablePin(event) {
+    event.preventDefault();
+    setIsPinSaving(true);
+    try {
+      const response = await window.budgetApi.disablePin(currentPin);
+      if (!response.ok) throw new Error(response.error || 'Incorrect PIN');
+      dispatch({ type: 'SET_DATA', payload: response.data });
+      setCurrentPin(''); setPinSection('view');
+      addToast('PIN removed.');
+    } catch (error) {
+      addToast(error.message, true);
+    } finally {
+      setIsPinSaving(false);
+    }
+  }
+
+  function cancelPinSection() {
+    setPinSection('view');
+    setCurrentPin(''); setNewPin(''); setConfirmNewPin('');
+  }
+
   function handleResetUiView() {
     dispatch({ type: 'SET_MONTH', payload: new Date() });
     dispatch({ type: 'SET_FILTERS', payload: { type: '', classification: '', query: '' } });
@@ -273,6 +337,142 @@ export default function SettingsPage({ addToast }) {
         >
           {isRunningTutorialReset ? 'Restarting Tutorial...' : 'Run Tutorial Again'}
         </button>
+      </div>
+      <div className={styles.preferences}>
+        <h3>Security</h3>
+        {(() => {
+          const pinEnabled = state.data.settings?.security?.pinEnabled === true;
+          if (pinSection === 'set') {
+            return (
+              <form onSubmit={handleSetPin} style={{ display: 'grid', gap: 8 }}>
+                <input
+                  id="settingsPinSetInput"
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="New PIN (4–12 digits)"
+                  value={newPin}
+                  onChange={(e) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 12))}
+                  autoFocus
+                  required
+                />
+                <input
+                  id="settingsPinSetConfirmInput"
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Confirm PIN"
+                  value={confirmNewPin}
+                  onChange={(e) => setConfirmNewPin(e.target.value.replace(/\D/g, '').slice(0, 12))}
+                  required
+                />
+                <div className={styles.actionRow}>
+                  <button type="button" className={styles.secondaryButton} onClick={cancelPinSection}>Cancel</button>
+                  <button id="settingsPinSetSaveBtn" type="submit" disabled={isPinSaving || newPin.length < 4 || confirmNewPin.length < 4}>
+                    {isPinSaving ? 'Saving...' : 'Save PIN'}
+                  </button>
+                </div>
+              </form>
+            );
+          }
+          if (pinSection === 'change') {
+            return (
+              <form onSubmit={handleChangePin} style={{ display: 'grid', gap: 8 }}>
+                <input
+                  id="settingsPinCurrentInput"
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Current PIN"
+                  value={currentPin}
+                  onChange={(e) => setCurrentPin(e.target.value.replace(/\D/g, '').slice(0, 12))}
+                  autoFocus
+                  required
+                />
+                <input
+                  id="settingsPinNewInput"
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="New PIN (4–12 digits)"
+                  value={newPin}
+                  onChange={(e) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 12))}
+                  required
+                />
+                <input
+                  id="settingsPinNewConfirmInput"
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Confirm New PIN"
+                  value={confirmNewPin}
+                  onChange={(e) => setConfirmNewPin(e.target.value.replace(/\D/g, '').slice(0, 12))}
+                  required
+                />
+                <div className={styles.actionRow}>
+                  <button type="button" className={styles.secondaryButton} onClick={cancelPinSection}>Cancel</button>
+                  <button id="settingsPinChangeSaveBtn" type="submit" disabled={isPinSaving || currentPin.length < 4 || newPin.length < 4 || confirmNewPin.length < 4}>
+                    {isPinSaving ? 'Saving...' : 'Change PIN'}
+                  </button>
+                </div>
+              </form>
+            );
+          }
+          if (pinSection === 'remove') {
+            return (
+              <form onSubmit={handleDisablePin} style={{ display: 'grid', gap: 8 }}>
+                <p className={styles.helper}>Enter your current PIN to remove it.</p>
+                <input
+                  id="settingsPinRemoveInput"
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Current PIN"
+                  value={currentPin}
+                  onChange={(e) => setCurrentPin(e.target.value.replace(/\D/g, '').slice(0, 12))}
+                  autoFocus
+                  required
+                />
+                <div className={styles.actionRow}>
+                  <button type="button" className={styles.secondaryButton} onClick={cancelPinSection}>Cancel</button>
+                  <button id="settingsPinRemoveBtn" type="submit" disabled={isPinSaving || currentPin.length < 4}>
+                    {isPinSaving ? 'Removing...' : 'Remove PIN'}
+                  </button>
+                </div>
+              </form>
+            );
+          }
+          // view mode
+          return pinEnabled ? (
+            <div className={styles.actionRow}>
+              <button
+                id="settingsPinChangeBtn"
+                type="button"
+                className={styles.secondaryButton}
+                onClick={() => setPinSection('change')}
+              >
+                Change PIN
+              </button>
+              <button
+                id="settingsPinDisableBtn"
+                type="button"
+                className={styles.secondaryButton}
+                onClick={() => setPinSection('remove')}
+              >
+                Remove PIN
+              </button>
+            </div>
+          ) : (
+            <button
+              id="settingsPinEnableBtn"
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => setPinSection('set')}
+            >
+              Set a PIN
+            </button>
+          );
+        })()}
       </div>
       <div className={styles.preferences}>
         <h3>Budget Preferences</h3>
