@@ -209,7 +209,7 @@ function wireIpc() {
 
   ipcMain.handle("category:delete", (_event, payload) => {
     try {
-      store.deleteCategory(payload.name);
+      store.deleteCategory(payload.name, payload.monthKey);
       return { ok: true, data: store.getData() };
     } catch (e) { return { ok: false, error: e.message }; }
   });
@@ -230,7 +230,7 @@ function wireIpc() {
 
   ipcMain.handle("limit:set", (_event, payload) => {
     try {
-      store.setBudgetLimit(payload.category, payload.limit);
+      store.setBudgetLimit(payload.category, payload.limit, payload.monthKey);
       return { ok: true, data: store.getData() };
     } catch (e) { return { ok: false, error: e.message }; }
   });
