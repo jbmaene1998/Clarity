@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext.jsx';
 import { currency, toMonthKey } from '../../utils/format.js';
-import { computeCategoryBudgetState } from '../../utils/budget.js';
+import { computeCategoryBudgetState, getEffectiveLimitForMonth } from '../../utils/budget.js';
 import styles from './CategoryList.module.css';
 
 export default function CategoryList({ addToast }) {
@@ -23,8 +23,11 @@ export default function CategoryList({ addToast }) {
   }
 
   async function handleSaveLimit(category) {
-    const limit = limits[category] ?? state.data.budgetLimits[category] ?? '';
-    const response = await window.budgetApi.setBudgetLimit(category, limit);
+    const limitsMap = state.data.budgetLimits[category] || {};
+    const limit = limits[category] !== undefined
+      ? limits[category]
+      : (getEffectiveLimitForMonth(limitsMap, mk) || '');
+    const response = await window.budgetApi.setBudgetLimit(category, limit, mk);
     if (!response.ok) {
       addToast(response.error || 'Unable to update limit', true);
       return;
@@ -34,7 +37,7 @@ export default function CategoryList({ addToast }) {
   }
 
   async function handleDeleteCategory(category) {
-    const response = await window.budgetApi.deleteCategory(category);
+    const response = await window.budgetApi.deleteCategory(category, mk);
     if (!response.ok) {
       addToast(response.error || 'Unable to delete category', true);
       return;
@@ -64,14 +67,15 @@ export default function CategoryList({ addToast }) {
           <span />
         </div>
         {state.data.categories.map((category) => {
+          const limitsMap = state.data.budgetLimits[category] || {};
           const baseLimit = limits[category] !== undefined
             ? limits[category]
-            : (state.data.budgetLimits[category] ?? '');
+            : (getEffectiveLimitForMonth(limitsMap, mk) || '');
           const budgetState = computeCategoryBudgetState(
             state.data.transactions,
             mk,
             category,
-            baseLimit,
+            limitsMap,
             rolloverEnabled
           );
           return (
