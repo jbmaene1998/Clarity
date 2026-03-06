@@ -47,6 +47,7 @@ contextBridge.exposeInMainWorld("budgetApi", {
   exportBackup: () => invoke("data:export-backup"),
   importBackup: () => invoke("data:import-backup"),
   onSystemToast: (handler) => {
+    ipcRenderer.removeAllListeners("system:toast");
     ipcRenderer.on("system:toast", (_event, message) => handler(message));
   }
 });
