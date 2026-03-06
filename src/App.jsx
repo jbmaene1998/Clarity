@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AppProvider, useApp } from './context/AppContext.jsx';
 import TopBar from './components/TopBar/index.jsx';
 import SummaryPanel from './components/SummaryPanel/index.jsx';
@@ -9,6 +9,7 @@ import BudgetPage from './components/BudgetPage/index.jsx';
 import SettingsPage from './components/SettingsPage/index.jsx';
 import IntelligencePage from './components/IntelligencePage/index.jsx';
 import PinLockOverlay from './components/PinLockOverlay/index.jsx';
+import PinSetupModal from './components/PinSetupModal/index.jsx';
 import BudgetSidebar from './components/BudgetSidebar/index.jsx';
 import ToastContainer from './components/ToastContainer/index.jsx';
 import TutorialOverlay from './components/TutorialOverlay/index.jsx';
@@ -18,11 +19,24 @@ import styles from './App.module.css';
 function AppInner() {
   const { state, dispatch } = useApp();
   const alertCacheRef = useRef(new Set());
+  const [showPinSetup, setShowPinSetup] = useState(false);
+  const tutorialPendingRef = useRef(false);
 
   function addToast(message, isError = false, actionLabel = '', action = null) {
     const id = Date.now() + Math.random();
     dispatch({ type: 'ADD_TOAST', payload: { id, message, isError, actionLabel, action } });
     setTimeout(() => dispatch({ type: 'REMOVE_TOAST', payload: id }), 4200);
+  }
+
+  function handlePinSetupDone(updatedData) {
+    setShowPinSetup(false);
+    if (updatedData) {
+      dispatch({ type: 'SET_DATA', payload: updatedData });
+    }
+    if (tutorialPendingRef.current) {
+      tutorialPendingRef.current = false;
+      dispatch({ type: 'SET_TUTORIAL', payload: { active: true, index: 0 } });
+    }
   }
 
   async function ensureMonthRecurrences(monthDate) {
@@ -46,7 +60,7 @@ function AppInner() {
       const security = settings.security || { pinEnabled: false, pinSalt: '', pinHash: '' };
       data.settings = {
         ...settings,
-        onboarding: { tutorialCompleted: Boolean(onboarding.tutorialCompleted) },
+        onboarding: { tutorialCompleted: Boolean(onboarding.tutorialCompleted), pinSetupSeen: Boolean(onboarding.pinSetupSeen) },
         appearance: { theme },
         budget: { rolloverEnabled },
         notifications: {
@@ -72,8 +86,11 @@ function AppInner() {
 
       await ensureMonthRecurrences(state.currentMonth);
 
-      const onboardingState = data.settings && data.settings.onboarding ? data.settings.onboarding : { tutorialCompleted: false };
-      if (!onboardingState.tutorialCompleted) {
+      const onboardingState = data.settings && data.settings.onboarding ? data.settings.onboarding : { tutorialCompleted: false, pinSetupSeen: false };
+      if (!onboardingState.pinSetupSeen) {
+        tutorialPendingRef.current = !onboardingState.tutorialCompleted;
+        setShowPinSetup(true);
+      } else if (!onboardingState.tutorialCompleted) {
         dispatch({ type: 'SET_TUTORIAL', payload: { active: true, index: 0 } });
       }
 
@@ -142,6 +159,7 @@ function AppInner() {
       </main>
       <ToastContainer addToast={addToast} />
       {state.tutorial.active && <TutorialOverlay />}
+      {showPinSetup && <PinSetupModal onDone={handlePinSetupDone} addToast={addToast} />}
       {state.pinLocked && <PinLockOverlay addToast={addToast} />}
     </div>
   );
