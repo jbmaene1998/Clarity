@@ -8,8 +8,36 @@
   box-shadow: 0 18px 30px rgba(8, 22, 34, 0.1);
 }
 
-.sidebar h3 {
-  margin-top: 0;
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  background: var(--bar-bg);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.tab {
+  flex: 1;
+  padding: 5px 0;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.activeTab {
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
 }
 
 .budgetItem {
@@ -27,10 +55,32 @@
   margin-bottom: 4px;
 }
 
-.rolloverInfo {
+.carryoverDetail {
+  display: flex;
+  justify-content: space-between;
   font-size: 11px;
   color: var(--muted);
-  margin-bottom: 6px;
+  padding: 1px 0;
+}
+
+.carryoverTotal {
+  border-top: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  margin-top: 3px;
+  padding-top: 4px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.carryoverLabel {
+  color: var(--muted);
+}
+
+.positive {
+  color: var(--success);
+}
+
+.negative {
+  color: var(--error);
 }
 
 .bar {

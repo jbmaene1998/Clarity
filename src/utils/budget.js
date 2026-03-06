@@ -57,14 +57,23 @@ function listMonthKeys(startMonthKey, endMonthKey) {
   return keys;
 }
 
+export function getEffectiveLimitForMonth(limitsMap, monthKey) {
+  if (!limitsMap || typeof limitsMap !== 'object') return 0;
+  const validKeys = Object.keys(limitsMap).filter((k) => k <= monthKey).sort();
+  if (validKeys.length === 0) return 0;
+  const value = Number(limitsMap[validKeys[validKeys.length - 1]]);
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+
 export function computeCategoryBudgetState(
   transactions,
   currentMonthKey,
   category,
-  limit,
+  limitsMap,
   rolloverEnabled
 ) {
-  const baseLimit = Number(limit) > 0 ? Number(limit) : 0;
+  const resolvedMap = (limitsMap && typeof limitsMap === 'object') ? limitsMap : {};
+  const baseLimit = getEffectiveLimitForMonth(resolvedMap, currentMonthKey);
   const spent = computeCategorySpend(transactions, currentMonthKey, category);
   if (baseLimit <= 0) {
     return {
@@ -86,20 +95,20 @@ export function computeCategoryBudgetState(
     };
   }
 
-  const expenseMonths = transactions
-    .filter((tx) => tx.type === 'expense' && tx.category === category)
-    .map((tx) => toMonthKey(tx.date))
-    .filter(Boolean)
-    .sort();
-
-  const firstMonth = expenseMonths[0];
   const previousMonth = shiftMonthKey(currentMonthKey, -1);
   let carryover = 0;
-  if (firstMonth && previousMonth && firstMonth <= previousMonth) {
-    const months = listMonthKeys(firstMonth, previousMonth);
-    for (const monthKey of months) {
-      const historicalSpend = computeCategorySpend(transactions, monthKey, category);
-      carryover += baseLimit - historicalSpend;
+  if (previousMonth) {
+    // Find the earliest month where a limit was set — start the rollover window there
+    const limitMonths = Object.keys(resolvedMap).filter((k) => k <= previousMonth).sort();
+    const firstLimitMonth = limitMonths[0];
+    if (firstLimitMonth) {
+      const months = listMonthKeys(firstLimitMonth, previousMonth);
+      for (const monthKey of months) {
+        const historicalLimit = getEffectiveLimitForMonth(resolvedMap, monthKey);
+        if (historicalLimit <= 0) continue; // no budget set for that month, skip
+        const historicalSpend = computeCategorySpend(transactions, monthKey, category);
+        carryover += historicalLimit - historicalSpend;
+      }
     }
   }
 

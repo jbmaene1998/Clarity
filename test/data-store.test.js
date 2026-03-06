@@ -87,15 +87,15 @@ test("BR-013 and BR-020 limit updates auto-save and clear on zero/blank", () => 
   store.init();
   const file = path.join(dir, "budget-data.json");
 
-  store.setBudgetLimit("Housing", 123.456);
+  store.setBudgetLimit("Housing", 123.456, "2026-03");
   let data = JSON.parse(fs.readFileSync(file, "utf8"));
-  assert.equal(data.budgetLimits.Housing, 123.46);
+  assert.deepEqual(data.budgetLimits.Housing, { "2026-03": 123.46 });
 
-  store.setBudgetLimit("Housing", 0);
+  store.setBudgetLimit("Housing", 0, "2026-03");
   data = JSON.parse(fs.readFileSync(file, "utf8"));
   assert.equal(data.budgetLimits.Housing, undefined);
 
-  store.setBudgetLimit("Food & Groceries", "");
+  store.setBudgetLimit("Food & Groceries", "", "2026-03");
   data = JSON.parse(fs.readFileSync(file, "utf8"));
   assert.equal(data.budgetLimits["Food & Groceries"], undefined);
 });
