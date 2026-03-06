@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext.jsx';
+import { generateDemoData } from '../../utils/demoData.js';
 import styles from './SettingsPage.module.css';
 
 export default function SettingsPage({ addToast }) {
@@ -94,6 +95,7 @@ export default function SettingsPage({ addToast }) {
       }
       dispatch({ type: 'SET_DATA', payload: response.data });
       dispatch({ type: 'SET_PAGE', payload: 'transactions' });
+      dispatch({ type: 'START_DEMO', payload: generateDemoData() });
       dispatch({ type: 'SET_TUTORIAL', payload: { active: true, index: 0 } });
       addToast('Tutorial restarted.');
     } catch (error) {

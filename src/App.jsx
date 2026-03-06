@@ -14,6 +14,7 @@ import BudgetSidebar from './components/BudgetSidebar/index.jsx';
 import ToastContainer from './components/ToastContainer/index.jsx';
 import TutorialOverlay from './components/TutorialOverlay/index.jsx';
 import { toMonthKey } from './utils/format.js';
+import { generateDemoData } from './utils/demoData.js';
 import styles from './App.module.css';
 
 function AppInner() {
@@ -35,6 +36,7 @@ function AppInner() {
     }
     if (tutorialPendingRef.current) {
       tutorialPendingRef.current = false;
+      dispatch({ type: 'START_DEMO', payload: generateDemoData() });
       dispatch({ type: 'SET_TUTORIAL', payload: { active: true, index: 0 } });
     }
   }
@@ -91,6 +93,7 @@ function AppInner() {
         tutorialPendingRef.current = !onboardingState.tutorialCompleted;
         setShowPinSetup(true);
       } else if (!onboardingState.tutorialCompleted) {
+        dispatch({ type: 'START_DEMO', payload: generateDemoData() });
         dispatch({ type: 'SET_TUTORIAL', payload: { active: true, index: 0 } });
       }
 
