@@ -205,8 +205,16 @@ export default function SettingsPage({ addToast }) {
   }
 
   async function handleAddRule() {
+    if (!ruleKeyword.trim()) {
+      addToast('Keyword is required.', true);
+      return;
+    }
+    if (!ruleTarget) {
+      addToast('Select a target category or source.', true);
+      return;
+    }
     const payload = {
-      keyword: ruleKeyword,
+      keyword: ruleKeyword.trim(),
       type: ruleType,
       category: ruleType === 'expense' ? ruleTarget : '',
       source: ruleType === 'income' ? ruleTarget : '',
@@ -218,6 +226,7 @@ export default function SettingsPage({ addToast }) {
     }
     dispatch({ type: 'SET_DATA', payload: response.data });
     setRuleKeyword('');
+    setRuleTarget('');
     addToast('Rule added');
   }
 

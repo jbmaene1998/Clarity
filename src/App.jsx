@@ -106,6 +106,7 @@ function AppInner() {
       if (ratio >= 1 && !alertCacheRef.current.has(overKey)) {
         addToast(`${category} exceeded its limit this month.`);
         alertCacheRef.current.add(overKey);
+        alertCacheRef.current.add(nearKey);
       } else if (ratio >= threshold && !alertCacheRef.current.has(nearKey)) {
         addToast(`${category} reached ${Math.round(ratio * 100)}% of its limit.`);
         alertCacheRef.current.add(nearKey);

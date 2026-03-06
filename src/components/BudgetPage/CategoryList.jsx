@@ -79,7 +79,7 @@ export default function CategoryList({ addToast }) {
               <div>{category}</div>
               <div>{currency(budgetState.spent)}</div>
               <div>{currency(budgetState.carryover)}</div>
-              <div>{currency(budgetState.effectiveLimit)}</div>
+              <div>{currency(budgetState.remaining)}</div>
               <input
                 type="number"
                 step="0.01"
